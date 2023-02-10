@@ -16,7 +16,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
                            QImage, QKeySequence, QLinearGradient, QPainter,
                            QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QPushButton, QSizePolicy,
-                               QTextEdit, QToolButton, QWidget)
+                               QTextEdit, QToolButton, QWidget, QLabel)
 
 
 # import time to caclculate the timing interval
@@ -25,6 +25,14 @@ import time
 # telex keyboard
 import bogo
 
+# text to speech library
+from gtts import gTTS
+from playsound import playsound
+
+#speech to text library
+import speech_recognition as sr
+import pyaudio
+r = sr.Recognizer()
 
 WAIT_TIME = 1
 KEYMAP = [
@@ -35,7 +43,7 @@ KEYMAP = [
     [u'm', u'n', u'o', u'ô', u'ơ'],
     [u'p', u'q', u'r', u's'],
     [u't', u'u', u'ư', u'v'],
-    [u'x', u'y', u'z'],
+    [u'w', u'x', u'y', u'z'],
     [u'!', u'@', u'#', u'$', u'%', u'^', u'&', u'*', u'(', u')'],
     [u'0', u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8', u'9']
 ]
@@ -45,6 +53,11 @@ class Ui_Widget(object):
     def setupUi(self, Widget):
         if not Widget.objectName():
             Widget.setObjectName(u"Widget")
+        self.prevWord = ''
+        # false flag indicates that the string is proccessed by bogo or not
+        self.currentWord = ['', False]
+        self.prevTime = time.monotonic()
+        self.prevKey = [-1, 0]
         Widget.resize(360, 500)
         font = QFont()
         font.setFamilies([u"Times New Roman"])
@@ -190,7 +203,9 @@ class Ui_Widget(object):
         self.button_number.clicked.connect(self.num_clicked)
         self.button_symbol.clicked.connect(self.sym_clicked)
         self.button_space.clicked.connect(self.space_clicked)
-
+        self.button_del.clicked.connect(self.del_clicked)
+        self.button_speaker.clicked.connect(self.speaker_clicked)
+        self.button_mic.clicked.connect(self.mic_clicked)
         self.retranslateUi(Widget)
 
         QMetaObject.connectSlotsByName(Widget)
@@ -235,22 +250,23 @@ class Ui_Widget(object):
         # self.textEdit.append(str(currTime - self.prevTime))
 
         SUB_KEYMAP = KEYMAP[key]
-
+        print(key)
+        print(prevKeyValue)
         if (prevKeyValue != key):
-            self.currentWord += SUB_KEYMAP[0]
+            self.currentWord[0] += SUB_KEYMAP[0]
             self.prevKey = [key, 0]
         else:
             if (inputInterval < WAIT_TIME):
                 prevKeyCount = (prevKeyCount + 1) % SUB_KEYMAP.__len__()
-                self.currentWord = self.currentWord[:-1]
-                self.currentWord += SUB_KEYMAP[prevKeyCount]
+                self.currentWord[0] = self.currentWord[0][:-1]
+                self.currentWord[0] += SUB_KEYMAP[prevKeyCount]
                 self.prevKey = [key, prevKeyCount]
             else:
-                self.currentWord += SUB_KEYMAP[0]
+                self.currentWord[0] += SUB_KEYMAP[0]
                 self.prevKey = [key, 0]
         self.prevTime = currTime
-        self.currentWord = bogo.process_sequence(self.currentWord)
-        self.textEdit.setText(self.currentWord)
+        presentCurrentWord = bogo.process_sequence(self.currentWord[0])
+        self.textEdit.setText(self.prevWord + presentCurrentWord+'|')
 
     def abc_clicked(self):
         self.input_clicked(0)
@@ -283,4 +299,49 @@ class Ui_Widget(object):
         self.input_clicked(9)
 
     def space_clicked(self):
-        self.input_clicked(10)
+        if(not self.currentWord[1]):
+            self.currentWord[0] = bogo.process_sequence(self.currentWord[0])
+            self.currentWord[1] = True
+        self.prevWord = self.prevWord + self.currentWord[0] + ' '
+        self.currentWord[0] = ''
+        self.currentWord[1] = False
+        self.prevTime = time.monotonic()
+        self.prevKey = [-1, 0]
+
+    def del_clicked(self):
+        self.prevTime = time.monotonic()
+        self.prevKey = [-1, 0]
+        if(not self.currentWord[1]):
+            self.currentWord[0] = bogo.process_sequence(self.currentWord[0])
+            self.currentWord[1] = True
+        if (self.currentWord[0]):
+            self.currentWord[0] = self.currentWord[0][:-1]
+        else:
+            if (self.prevWord):
+                self.prevWord = self.prevWord[:-1]
+        self.textEdit.setText(self.prevWord + self.currentWord[0] + '|')
+
+    def speaker_clicked(self):
+        if(not self.currentWord[1]):
+            self.currentWord[0] = bogo.process_sequence(self.currentWord[0])
+            self.currentWord[1] = True
+        text = self.prevWord + self.currentWord[0]
+        output = gTTS(text, lang="vi", slow=False)
+        output.save("output.mp3")
+        playsound("output.mp3")
+
+    def mic_clicked(self):
+        if(not self.currentWord[1]):
+            self.currentWord[0] = bogo.process_sequence(self.currentWord[0])
+            self.currentWord[1] = True
+        with sr.Microphone() as source:
+            audio = r.listen(source)
+            try:
+                text = r.recognize_google(audio,language="vi-VI")
+                self.prevWord = self.prevWord + self.currentWord[0]
+                self.currentWord[0] = text
+                self.currentWord[1] = True
+                self.textEdit.setText(self.prevWord + self.currentWord[0] + '|')
+            except:
+                print("Xin lỗi! tôi không nhận được voice!")
+        
