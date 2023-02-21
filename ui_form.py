@@ -18,6 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QPushButton, QSizePolicy,
                                QTextEdit, QToolButton, QWidget, QLabel)
 
+# import file system
+import os
 
 # import time to caclculate the timing interval
 import time
@@ -29,7 +31,7 @@ import bogo
 from gtts import gTTS
 from playsound import playsound
 
-#speech to text library
+# speech to text library
 import speech_recognition as sr
 import pyaudio
 r = sr.Recognizer()
@@ -64,6 +66,21 @@ class Ui_Widget(object):
         font.setPointSize(10)
         font.setBold(True)
         Widget.setFont(font)
+        Widget.setStyleSheet(u"QPushButton {\n"
+                             "	background-color: rgb(0, 255, 255);\n"
+                             "	font: 9pt \"Segoe Print\";\n"
+                             "	border-radius: 10px;\n"
+                             "}\n"
+                             "QToolButton {\n"
+                             "	background-color: rgb(170, 255, 255);\n"
+                             "	f\n"
+                             "	border-radius: 10px;\n"
+                             "}")
+        font = QFont()
+        font.setFamilies([u"Times New Roman"])
+        font.setPointSize(10)
+        font.setBold(True)
+        Widget.setFont(font)
         self.gridLayoutWidget = QWidget(Widget)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
         self.gridLayoutWidget.setGeometry(QRect(10, 190, 341, 301))
@@ -72,6 +89,7 @@ class Ui_Widget(object):
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.button_del = QPushButton(self.gridLayoutWidget)
         self.button_del.setObjectName(u"button_del")
+        self.button_del.setMinimumSize(QSize(0, 29))
 
         self.gridLayout.addWidget(self.button_del, 6, 1, 1, 1)
 
@@ -154,6 +172,7 @@ class Ui_Widget(object):
 
         self.button_space = QPushButton(self.gridLayoutWidget)
         self.button_space.setObjectName(u"button_space")
+        self.button_space.setMinimumSize(QSize(0, 29))
 
         self.gridLayout.addWidget(self.button_space, 6, 2, 1, 1)
 
@@ -182,7 +201,7 @@ class Ui_Widget(object):
         sizePolicy2.setHeightForWidth(
             self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy2)
-        self.button_speaker = QPushButton(Widget)
+        self.button_speaker = QToolButton(Widget)
         self.button_speaker.setObjectName(u"button_speaker")
         self.button_speaker.setGeometry(QRect(320, 30, 30, 30))
         icon1 = QIcon()
@@ -217,7 +236,7 @@ class Ui_Widget(object):
         self.button_del.setText(
             QCoreApplication.translate("Widget", u"DEL", None))
         self.button_xyz.setText(
-            QCoreApplication.translate("Widget", u"XYZ", None))
+            QCoreApplication.translate("Widget", u"WXYZ", None))
         self.button_tuv.setText(
             QCoreApplication.translate("Widget", u"TUV", None))
         self.button_abc.setText(
@@ -327,21 +346,23 @@ class Ui_Widget(object):
             self.currentWord[1] = True
         text = self.prevWord + self.currentWord[0]
         output = gTTS(text, lang="vi", slow=False)
+
         output.save("output.mp3")
         playsound("output.mp3")
+        os.remove("output.mp3")
 
     def mic_clicked(self):
         if(not self.currentWord[1]):
             self.currentWord[0] = bogo.process_sequence(self.currentWord[0])
             self.currentWord[1] = True
         with sr.Microphone() as source:
-            audio = r.listen(source)
+            audio = r.listen(source, 2, 10)
             try:
-                text = r.recognize_google(audio,language="vi-VI")
+                text = r.recognize_google(audio, language="vi-VI")
                 self.prevWord = self.prevWord + self.currentWord[0]
                 self.currentWord[0] = text
                 self.currentWord[1] = True
-                self.textEdit.setText(self.prevWord + self.currentWord[0] + '|')
+                self.textEdit.setText(
+                    self.prevWord + self.currentWord[0] + '|')
             except:
                 print("Xin lỗi! tôi không nhận được voice!")
-        

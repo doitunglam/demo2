@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>360</width>
-    <height>500</height>
+    <height>372</height>
    </rect>
   </property>
   <property name="font">
@@ -20,46 +20,89 @@
   <property name="windowTitle">
    <string>Widget</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton {
+	background-color: rgb(0, 255, 255);
+	font: 9pt &quot;Segoe Print&quot;;
+	border-radius: 10px;
+}
+QToolButton {
+	background-color: rgb(170, 255, 255);
+	f
+	border-radius: 10px;
+}</string>
+  </property>
   <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
+     <y>150</y>
      <width>341</width>
-     <height>301</height>
+     <height>211</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="4" column="2">
+     <widget class="QPushButton" name="button_pqrs">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>29</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>PQRS</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QPushButton" name="button_jkl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>29</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>JKL</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="button_def">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>29</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>DEF</string>
+      </property>
+     </widget>
+    </item>
     <item row="6" column="1">
      <widget class="QPushButton" name="button_del">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>29</height>
+       </size>
+      </property>
       <property name="text">
        <string>DEL</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QPushButton" name="button_xyz">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>29</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>XYZ</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0">
-     <widget class="QPushButton" name="button_tuv">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>29</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>TUV</string>
       </property>
      </widget>
     </item>
@@ -85,14 +128,8 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QPushButton" name="button_def">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
+    <item row="5" column="0">
+     <widget class="QPushButton" name="button_tuv">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -100,84 +137,7 @@
        </size>
       </property>
       <property name="text">
-       <string>DEF</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="2">
-     <widget class="QPushButton" name="button_symbol">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>29</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>@#?</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QPushButton" name="button_mno">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>29</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>MNO</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QPushButton" name="button_jkl">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>29</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>JKL</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2">
-     <widget class="QPushButton" name="button_pqrs">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>29</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>PQRS</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QPushButton" name="button_ghi">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>29</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>GHI</string>
+       <string>TUV</string>
       </property>
      </widget>
     </item>
@@ -200,10 +160,74 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="button_ghi">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>29</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>GHI</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QPushButton" name="button_symbol">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>29</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>@#?</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QPushButton" name="button_xyz">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>29</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>XYZ</string>
+      </property>
+     </widget>
+    </item>
     <item row="6" column="2">
      <widget class="QPushButton" name="button_space">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>29</height>
+       </size>
+      </property>
       <property name="text">
        <string>__________</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="button_mno">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>29</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>MNO</string>
       </property>
      </widget>
     </item>
@@ -263,7 +287,7 @@
     </sizepolicy>
    </property>
   </widget>
-  <widget class="QPushButton" name="button_speaker">
+  <widget class="QToolButton" name="button_speaker">
    <property name="geometry">
     <rect>
      <x>320</x>
